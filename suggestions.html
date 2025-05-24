@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Duck Suggestions</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f1f8e9;
+      color: #333;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #689f38;
+    }
+    form {
+      background: #ffffff;
+      padding: 20px;
+      margin: auto;
+      border: 2px solid #aed581;
+      border-radius: 15px;
+      max-width: 500px;
+    }
+    textarea, input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .btn {
+      background-color: #7cb342;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+    .btn:hover {
+      background-color: #558b2f;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #33691e;
+    }
+  </style>
+</head>
+<body>
+  <h1>💡 Got a Duck Idea?</h1>
+  <p>Share your wackiest, quackiest suggestions below!</p>
+
+  <form id="suggestionForm">
+    <input type="text" id="name" placeholder="Your Name (or Duck ID)" required />
+    <textarea id="suggestion" rows="5" placeholder="Type your duck-tastic idea here..." required></textarea>
+    <br />
+    <button class="btn" type="submit">Send Suggestion</button>
+  </form>
+
+  <a href="index.html">⬅ Back to Main Page</a>
+
+  <script>
+    const webhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; // <-- Replace this with your actual webhook URL
+
+    document.getElementById('suggestionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const suggestion = document.getElementById('suggestion').value.trim();
+
+      if (!name || !suggestion) {
+        alert('Please fill out both fields!');
+        return;
+      }
+
+      const data = {
+        content: `🦆 **New Duck Suggestion** 🦆\n**From:** ${name}\n**Idea:** ${suggestion}`
+      };
+
+      fetch(webhookURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Suggestion sent! Thanks for your quacky idea 🦆💡');
+          document.getElementById('suggestionForm').reset();
+        } else {
+          alert('Oops! Something went wrong. Try again later.');
+        }
+      })
+      .catch(() => alert('Network error! Are the ducks blocking your connection?'));
+    });
+  </script>
+</body>
+</html>
